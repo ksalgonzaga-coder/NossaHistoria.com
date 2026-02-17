@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { eq, desc } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import { InsertUser, users, products, InsertProduct, carouselPhotos, InsertCarouselPhoto, posts, InsertPost, transactions, InsertTransaction, weddingInfo, InsertWeddingInfo } from "../drizzle/schema";
 import { ENV } from './_core/env';
@@ -106,10 +106,10 @@ export async function getProductById(id: number) {
 export async function createProduct(data: InsertProduct) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
-  await db.insert(products).values(data);
-  // Get the last inserted product
-  const result = await db.select().from(products).orderBy(products.id).limit(1);
-  return result[0];
+  const result = await db.insert(products).values(data);
+  // Get the newly created product by fetching the last one
+  const created = await db.select().from(products).orderBy(desc(products.id)).limit(1);
+  return created[0];
 }
 
 export async function updateProduct(id: number, data: Partial<InsertProduct>) {

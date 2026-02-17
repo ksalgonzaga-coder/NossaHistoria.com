@@ -268,7 +268,22 @@ export const appRouter = router({
   // Wedding info router
   wedding: router({
     get: publicProcedure.query(async () => {
-      return getWeddingInfo();
+      const info = await getWeddingInfo();
+      // Return empty object if no wedding info exists yet
+      return info || {
+        id: 1,
+        groomName: null,
+        brideName: null,
+        weddingDate: null,
+        description: null,
+        bankAccountName: null,
+        bankAccountNumber: null,
+        bankCode: null,
+        pixKey: null,
+        stripeAccountId: null,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
     }),
     update: adminProcedure
       .input(
