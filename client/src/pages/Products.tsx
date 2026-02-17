@@ -44,7 +44,7 @@ export default function Products() {
 
   const handleCheckout = (product: ProductDetail) => {
     // Redirect to checkout page with product info
-    window.location.href = `/checkout?productId=${product.id}&amount=${product.price}`;
+    window.location.href = `/checkout?productId=${product.id}&amount=${product.price}&productName=${encodeURIComponent(product.name)}`;
   };
 
   const availableQuantity = selectedProduct
@@ -283,7 +283,9 @@ export default function Products() {
                       className="w-full gap-2"
                       disabled={availableQuantity === 0}
                     onClick={() => {
-                      handleCheckout(selectedProduct);
+                      if (selectedProduct) {
+                        handleCheckout(selectedProduct);
+                      }
                     }}
                     >
                       <ShoppingCart className="w-5 h-5" />

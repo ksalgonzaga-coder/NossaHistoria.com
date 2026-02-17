@@ -1,10 +1,10 @@
-import { useAuth } from '@/_core/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import Carousel from '@/components/Carousel';
 import { trpc } from '@/lib/trpc';
 import { Link } from 'wouter';
-import { Gift, Heart, MessageSquare, Users } from 'lucide-react';
+import { Gift, Heart, MessageSquare, Users, Instagram, Mail, MessageCircle } from 'lucide-react';
 import { getLoginUrl } from '@/const';
+import { useAuth } from '@/_core/hooks/useAuth';
 
 export default function Home() {
   const { user, isAuthenticated } = useAuth();
@@ -43,7 +43,7 @@ export default function Home() {
       </nav>
 
       {/* Hero Section with Carousel */}
-      <section className="py-8 sm:py-12 lg:py-16">
+      <section className="py-6 sm:py-8 lg:py-10">
         <div className="container">
           {carouselLoading ? (
             <div className="w-full h-96 bg-muted animate-pulse rounded-lg" />
@@ -54,13 +54,13 @@ export default function Home() {
       </section>
 
       {/* Wedding Info Section */}
-      <section className="py-12 lg:py-20 bg-muted/30">
+      <section className="py-8 lg:py-12 bg-muted/30">
         <div className="container max-w-2xl mx-auto text-center">
-          <h2 className="text-4xl sm:text-5xl font-elegant mb-6 text-foreground">
+          <h2 className="text-3xl sm:text-4xl font-elegant mb-4 text-foreground">
             {weddingInfo?.groomName} & {weddingInfo?.brideName}
           </h2>
           {weddingInfo?.weddingDate && (
-            <p className="text-lg text-muted-foreground mb-4">
+            <p className="text-base text-muted-foreground mb-3">
               {new Date(weddingInfo.weddingDate).toLocaleDateString('pt-BR', {
                 year: 'numeric',
                 month: 'long',
@@ -69,7 +69,7 @@ export default function Home() {
             </p>
           )}
           {weddingInfo?.description && (
-            <p className="text-base text-foreground/80 leading-relaxed mb-8">
+            <p className="text-sm text-foreground/80 leading-relaxed mb-6">
               {weddingInfo.description}
             </p>
           )}
@@ -83,41 +83,41 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section className="py-16 lg:py-24">
+      <section className="py-12 lg:py-16">
         <div className="container">
-          <h2 className="text-3xl sm:text-4xl font-elegant text-center mb-16 text-foreground">
+          <h2 className="text-2xl sm:text-3xl font-elegant text-center mb-12 text-foreground">
             Como Funciona
           </h2>
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-6">
             {/* Feature 1 */}
             <div className="text-center">
-              <div className="w-16 h-16 mx-auto mb-4 bg-primary/10 rounded-full flex items-center justify-center">
-                <Gift className="w-8 h-8 text-primary" />
+              <div className="w-14 h-14 mx-auto mb-3 bg-primary/10 rounded-full flex items-center justify-center">
+                <Gift className="w-7 h-7 text-primary" />
               </div>
-              <h3 className="text-xl font-elegant mb-3 text-foreground">Escolha Presentes</h3>
-              <p className="text-muted-foreground">
+              <h3 className="text-lg font-elegant mb-2 text-foreground">Escolha Presentes</h3>
+              <p className="text-sm text-muted-foreground">
                 Navegue pela nossa lista de presentes cuidadosamente selecionados pelo casal.
               </p>
             </div>
 
             {/* Feature 2 */}
             <div className="text-center">
-              <div className="w-16 h-16 mx-auto mb-4 bg-primary/10 rounded-full flex items-center justify-center">
-                <Heart className="w-8 h-8 text-primary" />
+              <div className="w-14 h-14 mx-auto mb-3 bg-primary/10 rounded-full flex items-center justify-center">
+                <Heart className="w-7 h-7 text-primary" />
               </div>
-              <h3 className="text-xl font-elegant mb-3 text-foreground">Contribua com Amor</h3>
-              <p className="text-muted-foreground">
+              <h3 className="text-lg font-elegant mb-2 text-foreground">Contribua com Amor</h3>
+              <p className="text-sm text-muted-foreground">
                 Sua contribuição é convertida em valor que vai direto para a conta do casal.
               </p>
             </div>
 
             {/* Feature 3 */}
             <div className="text-center">
-              <div className="w-16 h-16 mx-auto mb-4 bg-primary/10 rounded-full flex items-center justify-center">
-                <MessageSquare className="w-8 h-8 text-primary" />
+              <div className="w-14 h-14 mx-auto mb-3 bg-primary/10 rounded-full flex items-center justify-center">
+                <MessageSquare className="w-7 h-7 text-primary" />
               </div>
-              <h3 className="text-xl font-elegant mb-3 text-foreground">Deixe uma Mensagem</h3>
-              <p className="text-muted-foreground">
+              <h3 className="text-lg font-elegant mb-2 text-foreground">Deixe uma Mensagem</h3>
+              <p className="text-sm text-muted-foreground">
                 Compartilhe fotos e mensagens de bênçãos no nosso mural especial.
               </p>
             </div>
@@ -126,25 +126,31 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 lg:py-24 bg-gradient-to-r from-primary/5 to-primary/10">
+      <section className="py-10 lg:py-14 bg-gradient-to-r from-primary/5 to-primary/10">
         <div className="container max-w-2xl mx-auto text-center">
-          <h2 className="text-3xl sm:text-4xl font-elegant mb-6 text-foreground">
+          <h2 className="text-2xl sm:text-3xl font-elegant mb-4 text-foreground">
             Pronto para Celebrar?
           </h2>
-          <p className="text-lg text-muted-foreground mb-8">
+          <p className="text-base text-muted-foreground mb-6">
             Escolha um presente especial ou deixe uma mensagem para o casal.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/products">
               <Button size="lg" className="w-full sm:w-auto">
                 <Gift className="w-5 h-5 mr-2" />
                 Ver Presentes
               </Button>
             </Link>
-            <Link href="/posts">
+            <Link href="/contribute">
+              <Button size="lg" variant="outline" className="w-full sm:w-auto">
+                <Heart className="w-5 h-5 mr-2" />
+                Contribuir Livremente
+              </Button>
+            </Link>
+            <Link href="/gallery">
               <Button size="lg" variant="outline" className="w-full sm:w-auto">
                 <MessageSquare className="w-5 h-5 mr-2" />
-                Ir para Mural
+                Galeria
               </Button>
             </Link>
           </div>
@@ -154,19 +160,29 @@ export default function Home() {
       {/* Footer */}
       <footer className="bg-secondary text-secondary-foreground py-8 border-t border-border">
         <div className="container">
-          <div className="grid md:grid-cols-3 gap-8 mb-8">
+          <div className="grid md:grid-cols-4 gap-6 mb-6">
             <div>
-              <h3 className="font-elegant text-lg mb-4">Sobre</h3>
-              <p className="text-sm opacity-80">
+              <h3 className="font-elegant text-base mb-3">Sobre</h3>
+              <p className="text-xs opacity-80">
                 Uma plataforma elegante para celebrar o amor e a união do casal.
               </p>
             </div>
             <div>
-              <h3 className="font-elegant text-lg mb-4">Links Rápidos</h3>
-              <ul className="space-y-2 text-sm">
+              <h3 className="font-elegant text-base mb-3">Links Rápidos</h3>
+              <ul className="space-y-1 text-xs">
                 <li>
                   <Link href="/products" className="opacity-80 hover:opacity-100 transition-smooth">
                     Presentes
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/contribute" className="opacity-80 hover:opacity-100 transition-smooth">
+                    Contribuir
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/gallery" className="opacity-80 hover:opacity-100 transition-smooth">
+                    Galeria
                   </Link>
                 </li>
                 <li>
@@ -177,15 +193,29 @@ export default function Home() {
               </ul>
             </div>
             <div>
-              <h3 className="font-elegant text-lg mb-4">Contato</h3>
-              <p className="text-sm opacity-80">
+              <h3 className="font-elegant text-base mb-3">Contato</h3>
+              <p className="text-xs opacity-80">
                 {weddingInfo?.groomName && weddingInfo?.brideName
                   ? `${weddingInfo.groomName} & ${weddingInfo.brideName}`
                   : 'Entre em contato conosco'}
               </p>
             </div>
+            <div>
+              <h3 className="font-elegant text-base mb-3">Redes Sociais</h3>
+              <div className="flex gap-3">
+                <a href="#" className="opacity-80 hover:opacity-100 transition" title="Instagram">
+                  <Instagram className="w-5 h-5" />
+                </a>
+                <a href="#" className="opacity-80 hover:opacity-100 transition" title="WhatsApp">
+                  <MessageCircle className="w-5 h-5" />
+                </a>
+                <a href="#" className="opacity-80 hover:opacity-100 transition" title="Email">
+                  <Mail className="w-5 h-5" />
+                </a>
+              </div>
+            </div>
           </div>
-          <div className="border-t border-secondary-foreground/20 pt-8 text-center text-sm opacity-80">
+          <div className="border-t border-secondary-foreground/20 pt-6 text-center text-xs opacity-80">
             <p>&copy; 2026 Wedding Registry. Todos os direitos reservados.</p>
           </div>
         </div>

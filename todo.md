@@ -47,3 +47,17 @@
 - [x] Criar checkpoint final
 - [x] Documentação de uso
 - [x] Entregar ao usuário
+
+
+## Correções Solicitadas
+
+- [x] Redirecionamento automático para pagamento ao selecionar presente
+- [x] Nova aba "Contribuir com Valor Livre"
+- [x] Múltiplas opções de pagamento (cartão débito/crédito + PIX)
+- [x] Guia de configuração de pagamentos
+- [x] Mensagem do casal na homepage
+- [x] Compactar layout (exceto fotos)
+- [x] Footer com redes sociais (Instagram, WhatsApp, Email)
+- [x] Nova aba "Galeria de Eventos" com download, likes e comentários
+- [x] Schema de banco de dados para galeria de eventos
+- [x] Testes unitários para novas funcionalidades

@@ -22,6 +22,14 @@ import {
   updateTransaction,
   getWeddingInfo,
   updateWeddingInfo,
+  getEventGalleryPhotos,
+  createEventGalleryPhoto,
+  deleteEventGalleryPhoto,
+  getEventGalleryComments,
+  createEventGalleryComment,
+  deleteEventGalleryComment,
+  addEventGalleryLike,
+  removeEventGalleryLike,
 } from "./db";
 import { TRPCError } from "@trpc/server";
 import { createCheckoutSession } from "./stripe-checkout";
@@ -301,6 +309,77 @@ export const appRouter = router({
       )
       .mutation(async ({ input }) => {
         return updateWeddingInfo(input);
+      }),
+  }),
+
+  // Event gallery router
+  eventGallery: router({
+    list: publicProcedure.query(async () => {
+      return getEventGalleryPhotos();
+    }),
+    create: adminProcedure
+      .input(
+        z.object({
+          imageUrl: z.string().url(),
+          imageKey: z.string().optional(),
+          caption: z.string().optional(),
+        })
+      )
+      .mutation(async ({ input }) => {
+        return createEventGalleryPhoto(input);
+      }),
+    delete: adminProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(async ({ input }) => {
+        return deleteEventGalleryPhoto(input.id);
+      }),
+    getComments: publicProcedure
+      .input(z.object({ photoId: z.number() }))
+      .query(async ({ input }) => {
+        return getEventGalleryComments(input.photoId);
+      }),
+    addComment: publicProcedure
+      .input(
+        z.object({
+          photoId: z.number(),
+          guestName: z.string(),
+          guestEmail: z.string().email().optional(),
+          comment: z.string(),
+        })
+      )
+      .mutation(async ({ input }) => {
+        return createEventGalleryComment({
+          photoId: input.photoId,
+          guestName: input.guestName,
+          guestEmail: input.guestEmail,
+          comment: input.comment,
+          isApproved: false,
+        });
+      }),
+    deleteComment: adminProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(async ({ input }) => {
+        return deleteEventGalleryComment(input.id);
+      }),
+    addLike: publicProcedure
+      .input(
+        z.object({
+          photoId: z.number(),
+          guestEmail: z.string().email(),
+        })
+      )
+      .mutation(async ({ input }) => {
+        return addEventGalleryLike(input.photoId, input.guestEmail);
+      }),
+    removeLike: publicProcedure
+      .input(
+        z.object({
+          photoId: z.number(),
+          guestEmail: z.string().email(),
+        })
+      )
+      .mutation(async ({ input }) => {
+        return removeEventGalleryLike(input.photoId, input.guestEmail);
       }),
   }),
 });

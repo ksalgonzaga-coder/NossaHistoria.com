@@ -122,3 +122,51 @@ export const weddingInfo = mysqlTable("weddingInfo", {
 
 export type WeddingInfo = typeof weddingInfo.$inferSelect;
 export type InsertWeddingInfo = typeof weddingInfo.$inferInsert;
+
+
+/**
+ * Event gallery photos table for post-event photos
+ */
+export const eventGalleryPhotos = mysqlTable("eventGalleryPhotos", {
+  id: int("id").autoincrement().primaryKey(),
+  imageUrl: text("imageUrl").notNull(),
+  imageKey: varchar("imageKey", { length: 255 }),
+  caption: text("caption"),
+  likes: int("likes").default(0).notNull(),
+  isActive: boolean("isActive").default(true).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type EventGalleryPhoto = typeof eventGalleryPhotos.$inferSelect;
+export type InsertEventGalleryPhoto = typeof eventGalleryPhotos.$inferInsert;
+
+/**
+ * Event gallery comments table
+ */
+export const eventGalleryComments = mysqlTable("eventGalleryComments", {
+  id: int("id").autoincrement().primaryKey(),
+  photoId: int("photoId").notNull(),
+  guestName: varchar("guestName", { length: 255 }).notNull(),
+  guestEmail: varchar("guestEmail", { length: 320 }),
+  comment: text("comment").notNull(),
+  isApproved: boolean("isApproved").default(false).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type EventGalleryComment = typeof eventGalleryComments.$inferSelect;
+export type InsertEventGalleryComment = typeof eventGalleryComments.$inferInsert;
+
+/**
+ * Event gallery likes table
+ */
+export const eventGalleryLikes = mysqlTable("eventGalleryLikes", {
+  id: int("id").autoincrement().primaryKey(),
+  photoId: int("photoId").notNull(),
+  guestEmail: varchar("guestEmail", { length: 320 }).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type EventGalleryLike = typeof eventGalleryLikes.$inferSelect;
+export type InsertEventGalleryLike = typeof eventGalleryLikes.$inferInsert;
