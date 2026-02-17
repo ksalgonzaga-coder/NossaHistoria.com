@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users } from "../drizzle/schema";
+import { InsertUser, users, products, InsertProduct, carouselPhotos, InsertCarouselPhoto, posts, InsertPost, transactions, InsertTransaction, weddingInfo, InsertWeddingInfo } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -89,4 +89,142 @@ export async function getUserByOpenId(openId: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
-// TODO: add feature queries here as your schema grows.
+// Products queries
+export async function getProducts() {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(products).where(eq(products.isActive, true)).orderBy(products.createdAt);
+}
+
+export async function getProductById(id: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select().from(products).where(eq(products.id, id)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function createProduct(data: InsertProduct) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.insert(products).values(data);
+  // Get the last inserted product
+  const result = await db.select().from(products).orderBy(products.id).limit(1);
+  return result[0];
+}
+
+export async function updateProduct(id: number, data: Partial<InsertProduct>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.update(products).set(data).where(eq(products.id, id));
+  // Get the updated product
+  const result = await db.select().from(products).where(eq(products.id, id));
+  return result[0];
+}
+
+export async function deleteProduct(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.delete(products).where(eq(products.id, id));
+  return { success: true };
+}
+
+// Carousel photos queries
+export async function getCarouselPhotos() {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(carouselPhotos).where(eq(carouselPhotos.isActive, true)).orderBy(carouselPhotos.order);
+}
+
+export async function createCarouselPhoto(data: InsertCarouselPhoto) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.insert(carouselPhotos).values(data);
+  const result = await db.select().from(carouselPhotos).orderBy(carouselPhotos.id).limit(1);
+  return result[0];
+}
+
+export async function updateCarouselPhoto(id: number, data: Partial<InsertCarouselPhoto>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.update(carouselPhotos).set(data).where(eq(carouselPhotos.id, id));
+  const result = await db.select().from(carouselPhotos).where(eq(carouselPhotos.id, id));
+  return result[0];
+}
+
+export async function deleteCarouselPhoto(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.delete(carouselPhotos).where(eq(carouselPhotos.id, id));
+  return { success: true };
+}
+
+// Posts queries
+export async function getPosts(approved = true) {
+  const db = await getDb();
+  if (!db) return [];
+  if (approved) {
+    return db.select().from(posts).where(eq(posts.isApproved, true)).orderBy(posts.createdAt);
+  }
+  return db.select().from(posts).orderBy(posts.createdAt);
+}
+
+export async function createPost(data: InsertPost) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.insert(posts).values(data);
+  const result = await db.select().from(posts).orderBy(posts.id).limit(1);
+  return result[0];
+}
+
+export async function updatePost(id: number, data: Partial<InsertPost>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.update(posts).set(data).where(eq(posts.id, id));
+  const result = await db.select().from(posts).where(eq(posts.id, id));
+  return result[0];
+}
+
+export async function deletePost(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.delete(posts).where(eq(posts.id, id));
+}
+
+// Transactions queries
+export async function createTransaction(data: InsertTransaction) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.insert(transactions).values(data);
+}
+
+export async function getTransactionByStripeId(stripeId: string) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select().from(transactions).where(eq(transactions.stripePaymentIntentId, stripeId)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function updateTransaction(id: number, data: Partial<InsertTransaction>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.update(transactions).set(data).where(eq(transactions.id, id));
+}
+
+// Wedding info queries
+export async function getWeddingInfo() {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select().from(weddingInfo).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function updateWeddingInfo(data: Partial<InsertWeddingInfo>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const existing = await getWeddingInfo();
+  if (existing) {
+    return db.update(weddingInfo).set(data).where(eq(weddingInfo.id, existing.id));
+  } else {
+    return db.insert(weddingInfo).values(data);
+  }
+}
