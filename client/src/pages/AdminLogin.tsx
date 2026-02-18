@@ -1,49 +1,73 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Heart, Lock, Mail } from 'lucide-react';
+import { Heart, Lock, Mail, AlertCircle } from 'lucide-react';
 import { useLocation } from 'wouter';
 import { trpc } from '@/lib/trpc';
 import { toast } from 'sonner';
+import { useAdminAuth } from '@/hooks/useAdminAuth';
 
 export default function AdminLogin() {
   const [, setLocation] = useLocation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+  const { isAuthenticated } = useAdminAuth();
   
   const loginMutation = trpc.adminAuth.login.useMutation();
 
+  // Redirect if already authenticated
+  if (isAuthenticated) {
+    setLocation('/admin');
+    return null;
+  }
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
     
-    if (!email.trim() || !password.trim()) {
-      toast.error('Preencha email e senha');
+    // Validate inputs
+    if (!email.trim()) {
+      setError('Email é obrigatório');
+      return;
+    }
+
+    if (!password.trim()) {
+      setError('Senha é obrigatória');
+      return;
+    }
+
+    if (password.length < 6) {
+      setError('Senha deve ter no mínimo 6 caracteres');
       return;
     }
 
     setIsLoading(true);
     try {
       const result = await loginMutation.mutateAsync({
-        email,
+        email: email.toLowerCase().trim(),
         password,
       });
 
-      if (result) {
-        toast.success('Login realizado com sucesso!');
-        
+      if (result && result.id) {
         // Store admin session in localStorage
         localStorage.setItem('adminSession', JSON.stringify({
           id: result.id,
           email: result.email,
           timestamp: new Date().toISOString(),
         }));
+        
+        toast.success('Login realizado com sucesso!');
+        setLocation('/admin');
+      } else {
+        setError('Credenciais inválidas. Tente novamente.');
       }
-
-      // Redirect to admin panel
-      setLocation('/admin');
     } catch (error: any) {
-      toast.error(error.message || 'Erro ao fazer login');
+      const errorMessage = error?.message || 'Erro ao fazer login';
+      setError(errorMessage);
+      toast.error(errorMessage);
+      console.error('Login error:', error);
     } finally {
       setIsLoading(false);
     }
@@ -67,6 +91,14 @@ export default function AdminLogin() {
           </p>
         </div>
 
+        {/* Error Message */}
+        {error && (
+          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg flex gap-3">
+            <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+            <p className="text-sm text-red-700">{error}</p>
+          </div>
+        )}
+
         {/* Form */}
         <form onSubmit={handleLogin} className="space-y-4">
           {/* Email */}
@@ -83,6 +115,7 @@ export default function AdminLogin() {
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full pl-10 pr-3 py-2 border border-border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                 required
+                disabled={isLoading}
               />
             </div>
           </div>
@@ -101,6 +134,7 @@ export default function AdminLogin() {
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full pl-10 pr-3 py-2 border border-border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                 required
+                disabled={isLoading}
               />
             </div>
           </div>
@@ -109,7 +143,7 @@ export default function AdminLogin() {
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-xs text-blue-900">
             <p className="font-medium mb-1">🔐 Segurança</p>
             <p>
-              Use as credenciais de administrador configuradas no painel administrativo.
+              Use as credenciais de administrador configuradas no painel administrativo. Sua sessão expirará em 24 horas.
             </p>
           </div>
 

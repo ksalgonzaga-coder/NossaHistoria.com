@@ -103,3 +103,15 @@
 - [x] Redesenhar footer com redes sociais em coluna vertical
 - [x] Permitir múltiplas opções por rede social (Instagram, WhatsApp, Email)
 - [ ] Testar navegação e proteção de rotas
+
+
+## Melhorias de Segurança - Autenticação Admin
+
+- [x] Validar credenciais de admin com hash seguro (scrypt)
+- [x] Implementar proteção de procedures tRPC com verificação de permissões
+- [x] Criar middleware de autenticação para rotas admin
+- [x] Implementar hook useAdminAuth para gerenciar sessão
+- [x] Adicionar validação robusta na página de login
+- [x] Proteger página Admin com verificação de sessão
+- [x] Implementar logout seguro
+- [x] Testar segurança de todas as operações administrativas
