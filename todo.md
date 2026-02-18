@@ -83,3 +83,13 @@
 - [x] Seção de dados bancários
 - [x] Proteção de acesso (apenas casal)
 - [x] Testes para dashboard
+
+
+## Webhook do Stripe
+
+- [x] Endpoint do webhook com verificação de assinatura
+- [x] Processamento de eventos de pagamento
+- [x] Atualização de transações
+- [x] Atualização de saldo do casal
+- [x] Testes do webhook
+- [x] Documentação de configuração

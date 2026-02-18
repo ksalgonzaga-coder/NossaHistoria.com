@@ -86,6 +86,7 @@ export type InsertPost = typeof posts.$inferInsert;
  */
 export const transactions = mysqlTable("transactions", {
   id: int("id").autoincrement().primaryKey(),
+  stripeSessionId: varchar("stripeSessionId", { length: 255 }).unique(),
   stripePaymentIntentId: varchar("stripePaymentIntentId", { length: 255 }).unique(),
   guestName: varchar("guestName", { length: 255 }).notNull(),
   guestEmail: varchar("guestEmail", { length: 320 }),
