@@ -42,6 +42,7 @@ import { createCheckoutSession } from "./stripe-checkout";
 import { authenticateAdmin, hashPassword } from "./admin-auth";
 import { uploadImage, validateImageFile } from "./image-upload";
 import { createAdminCredential, getAdminByUserId } from "./db";
+import { checkRateLimit } from "./rate-limit";
 
 // Helper to check if user is admin
 const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
@@ -403,6 +404,15 @@ export const appRouter = router({
       )
       .mutation(async ({ input }) => {
         const result = await authenticateAdmin(input.email, input.password);
+        // Rate limiting: max 5 attempts per 15 minutes
+        const rateLimitCheck = checkRateLimit(input.email, 5, 15 * 60 * 1000);
+        if (!rateLimitCheck.allowed) {
+          throw new TRPCError({ 
+            code: "TOO_MANY_REQUESTS", 
+            message: `Muitas tentativas de login. Tente novamente em ${Math.ceil((rateLimitCheck.resetTime - Date.now()) / 60000)} minutos.` 
+          });
+        }
+        
         if (!result.success) {
           throw new TRPCError({ code: "UNAUTHORIZED", message: result.error });
         }

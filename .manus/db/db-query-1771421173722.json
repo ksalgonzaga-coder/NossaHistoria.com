@@ -1,0 +1,20 @@
+{
+  "query": "SELECT * FROM adminCredentials LIMIT 5;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2r9oUPKosiHfNw2.root --database EXSCFyKEAimxxCeWZqmM9V --execute SELECT * FROM adminCredentials LIMIT 5;",
+  "rows": [
+    {
+      "id": "1",
+      "userId": "1",
+      "email": "admin@wedding.com",
+      "passwordHash": "e8ddafe1344e17768b1871eac695cf17:73bb98449e7ba8920403253be825640df240779b5085c7017a997d0763d0215413fbef02ac8b3e9ee4ab6f6c6494be08333e19cd07b484cccf58cc85e7a24f4b",
+      "isActive": "1",
+      "lastLogin": "NULL",
+      "createdAt": "2026-02-17 23:58:46",
+      "updatedAt": "2026-02-17 23:58:46"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tuserId\temail\tpasswordHash\tisActive\tlastLogin\tcreatedAt\tupdatedAt\n1\t1\tadmin@wedding.com\te8ddafe1344e17768b1871eac695cf17:73bb98449e7ba8920403253be825640df240779b5085c7017a997d0763d0215413fbef02ac8b3e9ee4ab6f6c6494be08333e19cd07b484cccf58cc85e7a24f4b\t1\tNULL\t2026-02-17 23:58:46\t2026-02-17 23:58:46\n",
+  "stderr": "",
+  "execution_time_ms": 350
+}

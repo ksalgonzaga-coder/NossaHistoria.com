@@ -115,3 +115,14 @@
 - [x] Proteger página Admin com verificação de sessão
 - [x] Implementar logout seguro
 - [x] Testar segurança de todas as operações administrativas
+
+## Melhorias de Segurança - Criptografia e Proteção
+
+- [x] Criar credencial de admin com email ksalgonzaga@gmail.com e senha criptografada (scrypt com salt)
+- [x] Implementar criptografia AES-256-GCM para dados sensíveis (email, telefone, etc)
+- [x] Adicionar rate limiting para proteção contra brute force (5 tentativas por 15 min)
+- [x] Validar que dados de cartão NUNCA são armazenados (apenas IDs do Stripe)
+- [x] Testes de segurança (9 testes para criptografia e rate limiting)
+- [ ] Implementar CSRF protection em formulários
+- [ ] Adicionar validação rigorosa de entrada em todas as rotas
+- [ ] Documentar medidas de segurança implementadas
