@@ -117,6 +117,9 @@ export const weddingInfo = mysqlTable("weddingInfo", {
   bankCode: varchar("bankCode", { length: 50 }),
   pixKey: varchar("pixKey", { length: 255 }),
   stripeAccountId: varchar("stripeAccountId", { length: 255 }),
+  instagramLinks: text("instagramLinks"),
+  whatsappLinks: text("whatsappLinks"),
+  emailLinks: text("emailLinks"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });

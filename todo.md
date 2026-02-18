@@ -93,3 +93,13 @@
 - [x] Atualização de saldo do casal
 - [x] Testes do webhook
 - [x] Documentação de configuração
+
+
+## Correções de Navegação e UX
+
+- [x] Implementar navegação com 5 abas principais
+- [ ] Adicionar botões de navegação na página inicial
+- [x] Proteger área de admin com login obrigatório
+- [x] Redesenhar footer com redes sociais em coluna vertical
+- [x] Permitir múltiplas opções por rede social (Instagram, WhatsApp, Email)
+- [ ] Testar navegação e proteção de rotas

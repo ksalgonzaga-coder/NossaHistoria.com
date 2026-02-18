@@ -4,6 +4,9 @@ import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import Navigation from "./components/Navigation";
+import Footer from "./components/Footer";
+import ProtectedRoute from "./components/ProtectedRoute";
 import Home from "./pages/Home";
 import Products from "./pages/Products";
 import Posts from "./pages/Posts";
@@ -18,22 +21,41 @@ import CoupleDashboard from "./pages/CoupleDashboard";
 
 function Router() {
   return (
-    <Switch>
-      <Route path={"/"} component={Home} />
-      <Route path={"/products"} component={Products} />
-      <Route path={"/posts"} component={Posts} />
-      <Route path={"/admin"} component={Admin} />
-      <Route path={"/checkout"} component={Checkout} />
-      <Route path={"/checkout/success"} component={CheckoutSuccess} />
-      <Route path={"/checkout/cancel"} component={CheckoutCancel} />
-      <Route path={"/gallery"} component={EventGallery} />
-      <Route path={"/contribute"} component={Contribute} />
-      <Route path={"/admin-login"} component={AdminLogin} />
-      <Route path={"/dashboard"} component={CoupleDashboard} />
-      <Route path={"/404"} component={NotFound} />
-      {/* Final fallback route */}
-      <Route component={NotFound} />
-    </Switch>
+    <div className="flex flex-col min-h-screen">
+      <Navigation />
+      <main className="flex-1">
+        <Switch>
+          <Route path={"/"} component={Home} />
+          <Route path={"/products"} component={Products} />
+          <Route path={"/posts"} component={Posts} />
+          <Route path={"/admin"}>
+            {() => (
+              <ProtectedRoute requiredRole="admin">
+                <Admin />
+              </ProtectedRoute>
+            )}
+          </Route>
+          <Route path={"/gallery"}>
+            {() => (
+              <ProtectedRoute requiredRole="admin">
+                <EventGallery />
+              </ProtectedRoute>
+            )}
+          </Route>
+          <Route path={"/checkout"} component={Checkout} />
+          <Route path={"/checkout/success"} component={CheckoutSuccess} />
+          <Route path={"/checkout/cancel"} component={CheckoutCancel} />
+
+          <Route path={"/contribute"} component={Contribute} />
+          <Route path={"/admin-login"} component={AdminLogin} />
+          <Route path={"/dashboard"} component={CoupleDashboard} />
+          <Route path={"/404"} component={NotFound} />
+          {/* Final fallback route */}
+          <Route component={NotFound} />
+        </Switch>
+      </main>
+      <Footer />
+    </div>
   );
 }
 
