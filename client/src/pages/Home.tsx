@@ -82,6 +82,72 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Navigation Cards Section */}
+      <section className="py-12 lg:py-16 bg-white">
+        <div className="container">
+          <h2 className="text-2xl sm:text-3xl font-elegant text-center mb-12 text-foreground">
+            Explore as Seções
+          </h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+            {/* Presentes Card */}
+            <Link href="/products">
+              <div className="group cursor-pointer bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-6 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 border border-blue-200">
+                <div className="w-12 h-12 mb-4 bg-blue-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Gift className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-lg font-elegant text-blue-900 mb-2">Presentes</h3>
+                <p className="text-sm text-blue-700 mb-4">
+                  Escolha presentes especiais para o casal
+                </p>
+                <span className="text-xs font-semibold text-blue-600 group-hover:text-blue-900 transition">Explorar →</span>
+              </div>
+            </Link>
+
+            {/* Contribuição Card */}
+            <Link href="/contribute">
+              <div className="group cursor-pointer bg-gradient-to-br from-pink-50 to-pink-100 rounded-lg p-6 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 border border-pink-200">
+                <div className="w-12 h-12 mb-4 bg-pink-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Heart className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-lg font-elegant text-pink-900 mb-2">Contribuição</h3>
+                <p className="text-sm text-pink-700 mb-4">
+                  Contribua com um valor livre de sua escolha
+                </p>
+                <span className="text-xs font-semibold text-pink-600 group-hover:text-pink-900 transition">Contribuir →</span>
+              </div>
+            </Link>
+
+            {/* Mural Card */}
+            <Link href="/posts">
+              <div className="group cursor-pointer bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-6 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 border border-purple-200">
+                <div className="w-12 h-12 mb-4 bg-purple-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <MessageSquare className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-lg font-elegant text-purple-900 mb-2">Mural</h3>
+                <p className="text-sm text-purple-700 mb-4">
+                  Deixe mensagens e fotos especiais
+                </p>
+                <span className="text-xs font-semibold text-purple-600 group-hover:text-purple-900 transition">Visitar →</span>
+              </div>
+            </Link>
+
+            {/* Galeria Card */}
+            <Link href="/gallery">
+              <div className="group cursor-pointer bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-6 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 border border-green-200">
+                <div className="w-12 h-12 mb-4 bg-green-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Users className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-lg font-elegant text-green-900 mb-2">Galeria</h3>
+                <p className="text-sm text-green-700 mb-4">
+                  Fotos e vídeos do evento
+                </p>
+                <span className="text-xs font-semibold text-green-600 group-hover:text-green-900 transition">Acessar →</span>
+              </div>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Features Section */}
       <section className="py-12 lg:py-16">
         <div className="container">
