@@ -72,3 +72,14 @@
 - [ ] Integração de upload no painel de produtos
 - [ ] Integração de upload no painel de galeria
 - [ ] Proteção de rotas administrativas
+
+
+## Dashboard do Casal
+
+- [x] Procedures tRPC para dashboard
+- [x] Página de dashboard com saldo total
+- [x] Histórico de contribuições
+- [x] Gráficos e estatísticas
+- [x] Seção de dados bancários
+- [x] Proteção de acesso (apenas casal)
+- [x] Testes para dashboard

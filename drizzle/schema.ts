@@ -188,3 +188,25 @@ export const adminCredentials = mysqlTable("adminCredentials", {
 
 export type AdminCredential = typeof adminCredentials.$inferSelect;
 export type InsertAdminCredential = typeof adminCredentials.$inferInsert;
+
+
+/**
+ * Couple banking information for receiving contributions
+ */
+export const couplePaymentInfo = mysqlTable("couplePaymentInfo", {
+  id: int("id").autoincrement().primaryKey(),
+  bankName: varchar("bankName", { length: 100 }),
+  accountType: varchar("accountType", { length: 50 }), // "checking" or "savings"
+  accountHolder: varchar("accountHolder", { length: 255 }),
+  accountNumber: varchar("accountNumber", { length: 50 }),
+  routingNumber: varchar("routingNumber", { length: 50 }),
+  pixKey: varchar("pixKey", { length: 255 }), // CPF, email, phone, or random key
+  pixKeyType: varchar("pixKeyType", { length: 50 }), // "cpf", "email", "phone", "random"
+  stripeConnectId: varchar("stripeConnectId", { length: 255 }),
+  isVerified: boolean("isVerified").default(false).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type CouplePaymentInfo = typeof couplePaymentInfo.$inferSelect;
+export type InsertCouplePaymentInfo = typeof couplePaymentInfo.$inferInsert;

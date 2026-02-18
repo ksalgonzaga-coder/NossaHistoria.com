@@ -1,6 +1,6 @@
 import { eq, desc, and } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users, products, InsertProduct, carouselPhotos, InsertCarouselPhoto, posts, InsertPost, transactions, InsertTransaction, weddingInfo, InsertWeddingInfo, eventGalleryPhotos, InsertEventGalleryPhoto, eventGalleryComments, InsertEventGalleryComment, eventGalleryLikes, InsertEventGalleryLike, adminCredentials, InsertAdminCredential } from "../drizzle/schema";
+import { InsertUser, users, products, InsertProduct, carouselPhotos, InsertCarouselPhoto, posts, InsertPost, transactions, InsertTransaction, weddingInfo, InsertWeddingInfo, eventGalleryPhotos, InsertEventGalleryPhoto, eventGalleryComments, InsertEventGalleryComment, eventGalleryLikes, InsertEventGalleryLike, adminCredentials, InsertAdminCredential, couplePaymentInfo, InsertCouplePaymentInfo } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -336,4 +336,90 @@ export async function updateAdminPassword(adminId: number, passwordHash: string)
   const db = await getDb();
   if (!db) throw new Error("Database not available");
   return db.update(adminCredentials).set({ passwordHash }).where(eq(adminCredentials.id, adminId));
+}
+
+
+// Couple payment info queries
+export async function getCouplePaymentInfo() {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select().from(couplePaymentInfo).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function upsertCouplePaymentInfo(data: InsertCouplePaymentInfo) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const existing = await getCouplePaymentInfo();
+  if (existing) {
+    await db.update(couplePaymentInfo).set(data).where(eq(couplePaymentInfo.id, existing.id));
+    return { ...existing, ...data };
+  } else {
+    await db.insert(couplePaymentInfo).values(data);
+    const result = await db.select().from(couplePaymentInfo).orderBy(desc(couplePaymentInfo.id)).limit(1);
+    return result[0];
+  }
+}
+
+// Dashboard queries
+export async function getDashboardStats() {
+  const db = await getDb();
+  if (!db) return { totalContributions: 0, totalTransactions: 0, averageContribution: 0 };
+  
+  const allTransactions = await db.select().from(transactions);
+  const totalTransactions = allTransactions.length;
+  const totalContributions = allTransactions.reduce((sum, t) => sum + parseFloat(t.amount), 0);
+  const averageContribution = totalTransactions > 0 ? totalContributions / totalTransactions : 0;
+  
+  return {
+    totalContributions,
+    totalTransactions,
+    averageContribution,
+  };
+}
+
+export async function getDashboardTransactions(limit: number = 50, offset: number = 0) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return db.select().from(transactions)
+    .orderBy(desc(transactions.createdAt))
+    .limit(limit)
+    .offset(offset);
+}
+
+export async function getTransactionsByMonth() {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const allTransactions = await db.select().from(transactions).orderBy(desc(transactions.createdAt));
+  
+  // Group by month
+  const monthlyData: Record<string, number> = {};
+  allTransactions.forEach(t => {
+    const date = new Date(t.createdAt);
+    const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+    monthlyData[monthKey] = (monthlyData[monthKey] || 0) + parseFloat(t.amount);
+  });
+  
+  return Object.entries(monthlyData).map(([month, amount]) => ({
+    month,
+    amount,
+  }));
+}
+
+export async function getProductContributionStats() {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const allProducts = await db.select().from(products);
+  return allProducts.map(p => ({
+    id: p.id,
+    name: p.name,
+    price: p.price,
+    sold: p.quantitySold,
+    total: p.quantity,
+    revenue: parseFloat(p.price) * p.quantitySold,
+  }));
 }

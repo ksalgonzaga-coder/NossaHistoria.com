@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE `couplePaymentInfo` (\n\t`id` int AUTO_INCREMENT NOT NULL,\n\t`bankName` varchar(100),\n\t`accountType` varchar(50),\n\t`accountHolder` varchar(255),\n\t`accountNumber` varchar(50),\n\t`routingNumber` varchar(50),\n\t`pixKey` varchar(255),\n\t`pixKeyType` varchar(50),\n\t`stripeConnectId` varchar(255),\n\t`isVerified` boolean NOT NULL DEFAULT false,\n\t`createdAt` timestamp NOT NULL DEFAULT (now()),\n\t`updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,\n\tCONSTRAINT `couplePaymentInfo_id` PRIMARY KEY(`id`)\n);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2r9oUPKosiHfNw2.root --database EXSCFyKEAimxxCeWZqmM9V --execute CREATE TABLE `couplePaymentInfo` (\n\t`id` int AUTO_INCREMENT NOT NULL,\n\t`bankName` varchar(100),\n\t`accountType` varchar(50),\n\t`accountHolder` varchar(255),\n\t`accountNumber` varchar(50),\n\t`routingNumber` varchar(50),\n\t`pixKey` varchar(255),\n\t`pixKeyType` varchar(50),\n\t`stripeConnectId` varchar(255),\n\t`isVerified` boolean NOT NULL DEFAULT false,\n\t`createdAt` timestamp NOT NULL DEFAULT (now()),\n\t`updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,\n\tCONSTRAINT `couplePaymentInfo_id` PRIMARY KEY(`id`)\n);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 415
+}

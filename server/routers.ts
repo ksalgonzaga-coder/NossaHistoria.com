@@ -30,6 +30,12 @@ import {
   deleteEventGalleryComment,
   addEventGalleryLike,
   removeEventGalleryLike,
+  getCouplePaymentInfo,
+  upsertCouplePaymentInfo,
+  getDashboardStats,
+  getDashboardTransactions,
+  getTransactionsByMonth,
+  getProductContributionStats,
 } from "./db";
 import { TRPCError } from "@trpc/server";
 import { createCheckoutSession } from "./stripe-checkout";
@@ -449,8 +455,76 @@ export const appRouter = router({
         return uploadImage(input.file, input.filename, input.folder);
       }),
   }),
+  
+  // Couple dashboard router
+  dashboard: router({
+    getStats: protectedProcedure
+      .query(async ({ ctx }) => {
+        if (ctx.user.role !== "admin") {
+          throw new TRPCError({ code: "FORBIDDEN" });
+        }
+        return getDashboardStats();
+      }),
+    
+    getTransactions: protectedProcedure
+      .input(
+        z.object({
+          limit: z.number().default(50),
+          offset: z.number().default(0),
+        })
+      )
+      .query(async ({ input, ctx }) => {
+        if (ctx.user.role !== "admin") {
+          throw new TRPCError({ code: "FORBIDDEN" });
+        }
+        return getDashboardTransactions(input.limit, input.offset);
+      }),
+    
+    getMonthlyStats: protectedProcedure
+      .query(async ({ ctx }) => {
+        if (ctx.user.role !== "admin") {
+          throw new TRPCError({ code: "FORBIDDEN" });
+        }
+        return getTransactionsByMonth();
+      }),
+    
+    getProductStats: protectedProcedure
+      .query(async ({ ctx }) => {
+        if (ctx.user.role !== "admin") {
+          throw new TRPCError({ code: "FORBIDDEN" });
+        }
+        return getProductContributionStats();
+      }),
+    
+    getPaymentInfo: protectedProcedure
+      .query(async ({ ctx }) => {
+        if (ctx.user.role !== "admin") {
+          throw new TRPCError({ code: "FORBIDDEN" });
+        }
+        return getCouplePaymentInfo();
+      }),
+    
+    updatePaymentInfo: protectedProcedure
+      .input(
+        z.object({
+          bankName: z.string().optional(),
+          accountType: z.string().optional(),
+          accountHolder: z.string().optional(),
+          accountNumber: z.string().optional(),
+          routingNumber: z.string().optional(),
+          pixKey: z.string().optional(),
+          pixKeyType: z.string().optional(),
+          stripeConnectId: z.string().optional(),
+        })
+      )
+      .mutation(async ({ input, ctx }) => {
+        if (ctx.user.role !== "admin") {
+          throw new TRPCError({ code: "FORBIDDEN" });
+        }
+        return upsertCouplePaymentInfo(input);
+      }),
+  }),
 });
-
 export type AppRouter = typeof appRouter;
 
 // Export checkout router for webhook handling
