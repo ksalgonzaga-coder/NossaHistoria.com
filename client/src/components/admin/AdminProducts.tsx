@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Plus, Edit2, Trash2, ShoppingCart } from 'lucide-react';
+import { Plus, Edit2, Trash2, ShoppingCart, Upload, Image } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface ProductForm {
@@ -15,6 +15,8 @@ interface ProductForm {
   price: string;
   category: string;
   quantity: string;
+  imageUrl?: string;
+  imageKey?: string;
 }
 
 export default function AdminProducts() {
@@ -32,6 +34,9 @@ export default function AdminProducts() {
     quantity: '1',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string>('');
+  const uploadImageMutation = trpc.upload.image.useMutation();
 
   const handleOpenDialog = (product?: typeof products[0]) => {
     if (product) {
@@ -285,3 +290,7 @@ export default function AdminProducts() {
     </div>
   );
 }
+
+
+// Image upload handler to be added to form
+// TODO: Add image upload UI to product form

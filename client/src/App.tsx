@@ -13,6 +13,7 @@ import CheckoutSuccess from "./pages/CheckoutSuccess";
 import CheckoutCancel from "./pages/CheckoutCancel";
 import EventGallery from "./pages/EventGallery";
 import Contribute from "./pages/Contribute";
+import AdminLogin from "./pages/AdminLogin";
 
 function Router() {
   return (
@@ -26,6 +27,7 @@ function Router() {
       <Route path={"/checkout/cancel"} component={CheckoutCancel} />
       <Route path={"/gallery"} component={EventGallery} />
       <Route path={"/contribute"} component={Contribute} />
+      <Route path={"/admin-login"} component={AdminLogin} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

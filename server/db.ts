@@ -1,6 +1,6 @@
 import { eq, desc, and } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users, products, InsertProduct, carouselPhotos, InsertCarouselPhoto, posts, InsertPost, transactions, InsertTransaction, weddingInfo, InsertWeddingInfo, eventGalleryPhotos, InsertEventGalleryPhoto, eventGalleryComments, InsertEventGalleryComment, eventGalleryLikes, InsertEventGalleryLike } from "../drizzle/schema";
+import { InsertUser, users, products, InsertProduct, carouselPhotos, InsertCarouselPhoto, posts, InsertPost, transactions, InsertTransaction, weddingInfo, InsertWeddingInfo, eventGalleryPhotos, InsertEventGalleryPhoto, eventGalleryComments, InsertEventGalleryComment, eventGalleryLikes, InsertEventGalleryLike, adminCredentials, InsertAdminCredential } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -300,4 +300,40 @@ export async function removeEventGalleryLike(photoId: number, guestEmail: string
   await db.update(eventGalleryPhotos).set({ likes: likes.length }).where(eq(eventGalleryPhotos.id, photoId));
   
   return { success: true };
+}
+
+
+// Admin credentials queries
+export async function createAdminCredential(data: InsertAdminCredential) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.insert(adminCredentials).values(data);
+  const result = await db.select().from(adminCredentials).orderBy(desc(adminCredentials.id)).limit(1);
+  return result[0];
+}
+
+export async function getAdminByEmail(email: string) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select().from(adminCredentials).where(eq(adminCredentials.email, email)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function getAdminByUserId(userId: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select().from(adminCredentials).where(eq(adminCredentials.userId, userId)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function updateAdminLastLogin(adminId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.update(adminCredentials).set({ lastLogin: new Date() }).where(eq(adminCredentials.id, adminId));
+}
+
+export async function updateAdminPassword(adminId: number, passwordHash: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.update(adminCredentials).set({ passwordHash }).where(eq(adminCredentials.id, adminId));
 }

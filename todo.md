@@ -61,3 +61,14 @@
 - [x] Nova aba "Galeria de Eventos" com download, likes e comentários
 - [x] Schema de banco de dados para galeria de eventos
 - [x] Testes unitários para novas funcionalidades
+
+
+## Novas Funcionalidades - Upload S3 e Autenticação Admin
+
+- [x] Sistema de autenticação de administrador com login/senha
+- [x] Funcionalidade de upload de imagens para S3
+- [x] Página de login de administrador
+- [x] Testes para autenticação
+- [ ] Integração de upload no painel de produtos
+- [ ] Integração de upload no painel de galeria
+- [ ] Proteção de rotas administrativas

@@ -170,3 +170,21 @@ export const eventGalleryLikes = mysqlTable("eventGalleryLikes", {
 
 export type EventGalleryLike = typeof eventGalleryLikes.$inferSelect;
 export type InsertEventGalleryLike = typeof eventGalleryLikes.$inferInsert;
+
+
+/**
+ * Admin credentials table for password-based authentication
+ */
+export const adminCredentials = mysqlTable("adminCredentials", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull().references(() => users.id, { onDelete: "cascade" }),
+  email: varchar("email", { length: 320 }).notNull().unique(),
+  passwordHash: varchar("passwordHash", { length: 255 }).notNull(),
+  isActive: boolean("isActive").default(true).notNull(),
+  lastLogin: timestamp("lastLogin"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type AdminCredential = typeof adminCredentials.$inferSelect;
+export type InsertAdminCredential = typeof adminCredentials.$inferInsert;

@@ -33,6 +33,9 @@ import {
 } from "./db";
 import { TRPCError } from "@trpc/server";
 import { createCheckoutSession } from "./stripe-checkout";
+import { authenticateAdmin, hashPassword } from "./admin-auth";
+import { uploadImage, validateImageFile } from "./image-upload";
+import { createAdminCredential, getAdminByUserId } from "./db";
 
 // Helper to check if user is admin
 const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
@@ -380,6 +383,70 @@ export const appRouter = router({
       )
       .mutation(async ({ input }) => {
         return removeEventGalleryLike(input.photoId, input.guestEmail);
+      }),
+  }),
+  
+  // Admin authentication router
+  adminAuth: router({
+    login: publicProcedure
+      .input(
+        z.object({
+          email: z.string().email(),
+          password: z.string().min(6),
+        })
+      )
+      .mutation(async ({ input }) => {
+        const result = await authenticateAdmin(input.email, input.password);
+        if (!result.success) {
+          throw new TRPCError({ code: "UNAUTHORIZED", message: result.error });
+        }
+        return result.admin;
+      }),
+    
+    setupAdmin: protectedProcedure
+      .input(
+        z.object({
+          email: z.string().email(),
+          password: z.string().min(6),
+        })
+      )
+      .mutation(async ({ input, ctx }) => {
+        if (ctx.user.role !== "admin") {
+          throw new TRPCError({ code: "FORBIDDEN" });
+        }
+        
+        const existing = await getAdminByUserId(ctx.user.id);
+        if (existing) {
+          throw new TRPCError({ code: "BAD_REQUEST", message: "Admin already set up" });
+        }
+        
+        const passwordHash = hashPassword(input.password);
+        return createAdminCredential({
+          userId: ctx.user.id,
+          email: input.email,
+          passwordHash,
+          isActive: true,
+        });
+      }),
+  }),
+  
+  // Image upload router
+  upload: router({
+    image: adminProcedure
+      .input(
+        z.object({
+          file: z.instanceof(Buffer),
+          filename: z.string(),
+          folder: z.enum(["products", "carousel", "gallery", "posts"]),
+        })
+      )
+      .mutation(async ({ input }) => {
+        const validation = validateImageFile(input.file, input.filename);
+        if (!validation.valid) {
+          throw new TRPCError({ code: "BAD_REQUEST", message: validation.error });
+        }
+        
+        return uploadImage(input.file, input.filename, input.folder);
       }),
   }),
 });
