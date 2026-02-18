@@ -1,0 +1,48 @@
+{
+  "buildCommand": "pnpm build",
+  "devCommand": "pnpm dev",
+  "installCommand": "pnpm install",
+  "framework": "other",
+  "outputDirectory": "dist",
+  "public": true,
+  "env": [
+    "DATABASE_URL",
+    "JWT_SECRET",
+    "STRIPE_SECRET_KEY",
+    "STRIPE_WEBHOOK_SECRET",
+    "ENCRYPTION_KEY",
+    "VITE_APP_TITLE",
+    "VITE_APP_LOGO",
+    "VITE_STRIPE_PUBLISHABLE_KEY",
+    "VITE_FRONTEND_FORGE_API_KEY",
+    "VITE_FRONTEND_FORGE_API_URL",
+    "VITE_OAUTH_PORTAL_URL",
+    "VITE_APP_ID",
+    "OAUTH_SERVER_URL",
+    "OWNER_NAME",
+    "OWNER_OPEN_ID",
+    "BUILT_IN_FORGE_API_KEY",
+    "BUILT_IN_FORGE_API_URL"
+  ],
+  "rewrites": [
+    {
+      "source": "/api/trpc/:path*",
+      "destination": "/api/trpc/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/api/trpc/:path*",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        }
+      ]
+    }
+  ]
+}
