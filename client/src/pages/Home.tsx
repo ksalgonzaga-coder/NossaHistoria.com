@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import Carousel from '@/components/Carousel';
 import { trpc } from '@/lib/trpc';
 import { Link } from 'wouter';
-import { Gift, Heart, MessageSquare, Users, Instagram, Mail, MessageCircle } from 'lucide-react';
+import { Gift, Heart, MessageSquare, Image, Instagram, Mail, MessageCircle } from 'lucide-react';
 import { getLoginUrl } from '@/const';
 import { useAuth } from '@/_core/hooks/useAuth';
 
@@ -14,34 +14,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Navigation */}
-      <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-border shadow-elegant">
-        <div className="container flex items-center justify-between py-4">
-          <div className="flex items-center gap-2">
-            <Heart className="w-6 h-6 text-primary" />
-            <h1 className="text-2xl font-elegant text-foreground">
-              {weddingInfo?.groomName} & {weddingInfo?.brideName}
-            </h1>
-          </div>
-          <div className="flex items-center gap-4">
-            {isAuthenticated && user?.role === 'admin' && (
-              <Link href="/admin">
-                <Button variant="outline" size="sm">
-                  Painel Admin
-                </Button>
-              </Link>
-            )}
-            {!isAuthenticated ? (
-              <a href={getLoginUrl()}>
-                <Button size="sm">Entrar</Button>
-              </a>
-            ) : (
-              <span className="text-sm text-muted-foreground">Olá, {user?.name}</span>
-            )}
-          </div>
-        </div>
-      </nav>
-
       {/* Hero Section with Carousel */}
       <section className="py-6 sm:py-8 lg:py-10">
         <div className="container">
@@ -135,7 +107,7 @@ export default function Home() {
             <Link href="/gallery">
               <div className="group cursor-pointer bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-6 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 border border-green-200">
                 <div className="w-12 h-12 mb-4 bg-green-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <Users className="w-6 h-6 text-white" />
+                  <Image className="w-6 h-6 text-white" />
                 </div>
                 <h3 className="text-lg font-elegant text-green-900 mb-2">Galeria</h3>
                 <p className="text-sm text-green-700 mb-4">
@@ -154,7 +126,7 @@ export default function Home() {
           <h2 className="text-2xl sm:text-3xl font-elegant text-center mb-12 text-foreground">
             Como Funciona
           </h2>
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-4 gap-6">
             {/* Feature 1 */}
             <div className="text-center">
               <div className="w-14 h-14 mx-auto mb-3 bg-primary/10 rounded-full flex items-center justify-center">
@@ -187,6 +159,17 @@ export default function Home() {
                 Compartilhe fotos e mensagens de bênçãos no nosso mural especial.
               </p>
             </div>
+
+            {/* Feature 4 */}
+            <div className="text-center">
+              <div className="w-14 h-14 mx-auto mb-3 bg-primary/10 rounded-full flex items-center justify-center">
+                <Image className="w-7 h-7 text-primary" />
+              </div>
+              <h3 className="text-lg font-elegant mb-2 text-foreground">Galeria de Eventos</h3>
+              <p className="text-sm text-muted-foreground">
+                Acesse fotos e vídeos do evento para recordações especiais.
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -213,79 +196,21 @@ export default function Home() {
                 Contribuir Livremente
               </Button>
             </Link>
-            <Link href="/gallery">
+            <Link href="/posts">
               <Button size="lg" variant="outline" className="w-full sm:w-auto">
                 <MessageSquare className="w-5 h-5 mr-2" />
+                Mural
+              </Button>
+            </Link>
+            <Link href="/gallery">
+              <Button size="lg" variant="outline" className="w-full sm:w-auto">
+                <Image className="w-5 h-5 mr-2" />
                 Galeria
               </Button>
             </Link>
           </div>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="bg-secondary text-secondary-foreground py-8 border-t border-border">
-        <div className="container">
-          <div className="grid md:grid-cols-4 gap-6 mb-6">
-            <div>
-              <h3 className="font-elegant text-base mb-3">Sobre</h3>
-              <p className="text-xs opacity-80">
-                Uma plataforma elegante para celebrar o amor e a união do casal.
-              </p>
-            </div>
-            <div>
-              <h3 className="font-elegant text-base mb-3">Links Rápidos</h3>
-              <ul className="space-y-1 text-xs">
-                <li>
-                  <Link href="/products" className="opacity-80 hover:opacity-100 transition-smooth">
-                    Presentes
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/contribute" className="opacity-80 hover:opacity-100 transition-smooth">
-                    Contribuir
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/gallery" className="opacity-80 hover:opacity-100 transition-smooth">
-                    Galeria
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/posts" className="opacity-80 hover:opacity-100 transition-smooth">
-                    Mural
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-elegant text-base mb-3">Contato</h3>
-              <p className="text-xs opacity-80">
-                {weddingInfo?.groomName && weddingInfo?.brideName
-                  ? `${weddingInfo.groomName} & ${weddingInfo.brideName}`
-                  : 'Entre em contato conosco'}
-              </p>
-            </div>
-            <div>
-              <h3 className="font-elegant text-base mb-3">Redes Sociais</h3>
-              <div className="flex gap-3">
-                <a href="#" className="opacity-80 hover:opacity-100 transition" title="Instagram">
-                  <Instagram className="w-5 h-5" />
-                </a>
-                <a href="#" className="opacity-80 hover:opacity-100 transition" title="WhatsApp">
-                  <MessageCircle className="w-5 h-5" />
-                </a>
-                <a href="#" className="opacity-80 hover:opacity-100 transition" title="Email">
-                  <Mail className="w-5 h-5" />
-                </a>
-              </div>
-            </div>
-          </div>
-          <div className="border-t border-secondary-foreground/20 pt-6 text-center text-xs opacity-80">
-            <p>&copy; 2026 Wedding Registry. Todos os direitos reservados.</p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }
